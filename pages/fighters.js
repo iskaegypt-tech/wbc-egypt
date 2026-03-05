@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { createClient } from "@supabase/supabase-js";
 
 const supabase = createClient(
@@ -6,91 +6,57 @@ const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 );
 
-export default function FighterRegister() {
+export default function Fighters() {
 
-  const [fullName, setFullName] = useState("");
-  const [nickname, setNickname] = useState("");
-  const [nationality, setNationality] = useState("");
-  const [weightClass, setWeightClass] = useState("");
+  const [fighters, setFighters] = useState([]);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  useEffect(() => {
+    fetchFighters();
+  }, []);
 
-    const { error } = await supabase
+  async function fetchFighters() {
+    const { data, error } = await supabase
       .from("fighters")
-      .insert([
-        {
-          full_name: fullName,
-          nickname: nickname,
-          nationality: nationality,
-          weight_class: weightClass,
-          wins: 0,
-          losses: 0,
-          draws: 0,
-          ko_wins: 0
-        }
-      ]);
+      .select("*")
+      .order("created_at", { ascending: false });
 
     if (error) {
-      alert("Error saving fighter");
-      console.error(error);
+      console.error("Error loading fighters:", error);
     } else {
-      alert("Fighter registered successfully");
-      setFullName("");
-      setNickname("");
-      setNationality("");
-      setWeightClass("");
+      setFighters(data);
     }
-  };
+  }
 
   return (
-    <div style={{padding:"40px", fontFamily:"Arial"}}>
-      <h1>Fighter Registration</h1>
+    <div style={{ padding: "40px", fontFamily: "Arial" }}>
+      <h1>Fighters</h1>
 
-      <form onSubmit={handleSubmit}>
+      <table border="1" cellPadding="10" style={{ borderCollapse: "collapse", width: "100%" }}>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Nickname</th>
+            <th>Nationality</th>
+            <th>Weight Class</th>
+            <th>Record</th>
+          </tr>
+        </thead>
 
-        <div style={{marginBottom:"10px"}}>
-          <input
-            type="text"
-            placeholder="Full Name"
-            value={fullName}
-            onChange={(e) => setFullName(e.target.value)}
-            required
-          />
-        </div>
+        <tbody>
+          {fighters.map((fighter) => (
+            <tr key={fighter.id}>
+              <td>{fighter.full_name}</td>
+              <td>{fighter.nickname}</td>
+              <td>{fighter.nationality}</td>
+              <td>{fighter.weight_class}</td>
+              <td>
+                {fighter.wins}-{fighter.losses}-{fighter.draws}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
 
-        <div style={{marginBottom:"10px"}}>
-          <input
-            type="text"
-            placeholder="Nickname"
-            value={nickname}
-            onChange={(e) => setNickname(e.target.value)}
-          />
-        </div>
-
-        <div style={{marginBottom:"10px"}}>
-          <input
-            type="text"
-            placeholder="Nationality"
-            value={nationality}
-            onChange={(e) => setNationality(e.target.value)}
-          />
-        </div>
-
-        <div style={{marginBottom:"10px"}}>
-          <input
-            type="text"
-            placeholder="Weight Class"
-            value={weightClass}
-            onChange={(e) => setWeightClass(e.target.value)}
-          />
-        </div>
-
-        <button type="submit">
-          Register Fighter
-        </button>
-
-      </form>
     </div>
   );
 }
