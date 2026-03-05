@@ -3,67 +3,48 @@ import Link from "next/link"
 import { createClient } from "@supabase/supabase-js"
 
 const supabase = createClient(
-process.env.NEXT_PUBLIC_SUPABASE_URL,
-process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+  process.env.NEXT_PUBLIC_SUPABASE_URL,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 )
 
-export default function Fighters(){
+export default function Fighters() {
 
-const [fighters,setFighters]=useState([])
+  const [fighters,setFighters] = useState([])
 
-useEffect(()=>{
-loadFighters()
-},[])
+  useEffect(()=>{
+    loadFighters()
+  },[])
 
-async function loadFighters(){
+  async function loadFighters(){
 
-const {data} = await supabase
-.from("fighters")
-.select("*")
+    const { data, error } = await supabase
+      .from("fighters")
+      .select("*")
 
-setFighters(data)
+    if(error){
+      console.log(error)
+      return
+    }
 
-}
+    setFighters(data)
+  }
 
-return(
+  return(
 
-<div style={{padding:"40px"}}>
+    <div style={{padding:"40px"}}>
 
-<h1>Fighters</h1>
+      <h1>Fighters</h1>
 
-<table border="1" cellPadding="10">
+      {fighters.map((fighter)=>(
+        <div key={fighter.id} style={{marginBottom:"10px"}}>
 
-<thead>
-<tr>
-<th>Name</th>
-<th>Weight Class</th>
-<th>Gym</th>
-</tr>
-</thead>
+          <Link href={`/fighter/${fighter.id}`}>
+            {fighter.full_name}
+          </Link>
 
-<tbody>
+        </div>
+      ))}
 
-{fighters.map(f=>(
-<tr key={f.id}>
-
-<td>
-<Link href={`/fighter/${f.id}`}>
-{f.full_name}
-</Link>
-</td>
-
-<td>{f.weight_class}</td>
-<td>{f.gym_name}</td>
-
-</tr>
-))}
-
-</tbody>
-
-</table>
-
-</div>
-
-)
-
+    </div>
+  )
 }
