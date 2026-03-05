@@ -1,74 +1,57 @@
-import { useRouter } from "next/router"
-import { useEffect, useState } from "react"
-import { createClient } from "@supabase/supabase-js"
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import { createClient } from "@supabase/supabase-js";
 
 const supabase = createClient(
-process.env.NEXT_PUBLIC_SUPABASE_URL,
-process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-)
+  process.env.NEXT_PUBLIC_SUPABASE_URL,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+);
 
-export default function FighterProfile(){
+export default function FighterProfile() {
 
-const router = useRouter()
-const { id } = router.query
+  const router = useRouter();
+  const { id } = router.query;
 
-const [fighter,setFighter] = useState(null)
+  const [fighter, setFighter] = useState(null);
 
-useEffect(()=>{
-if(id){
-loadFighter()
-}
-},[id])
+  useEffect(() => {
+    if (id) getFighter();
+  }, [id]);
 
-async function loadFighter(){
+  async function getFighter() {
 
-const { data, error } = await supabase
-.from("fighters")
-.select("*")
-.eq("id",id)
-.single()
+    const { data, error } = await supabase
+      .from("fighters")
+      .select("*")
+      .eq("id", id)
+      .single();
 
-if(!error){
-setFighter(data)
-}
+    if (!error) {
+      setFighter(data);
+    }
+  }
 
-}
+  if (!fighter) return <p style={{padding:"40px"}}>Loading...</p>;
 
-if(!fighter){
-return <div style={{padding:"40px"}}>Loading...</div>
-}
+  return (
+    <div style={{padding:"40px", fontFamily:"Arial"}}>
 
-return(
+      <h1>{fighter.full_name}</h1>
 
-<div style={{padding:"40px"}}>
+      <h3>Nickname: {fighter.nickname}</h3>
 
-<h1>{fighter.full_name}</h1>
+      <p><b>Nationality:</b> {fighter.nationality}</p>
 
-<p><b>Nickname:</b> {fighter.nickname}</p>
+      <p><b>Weight Class:</b> {fighter.weight_class}</p>
 
-<p><b>Nationality:</b> {fighter.nationality}</p>
+      <p><b>Record:</b> {fighter.wins}-{fighter.losses}-{fighter.draws}</p>
 
-<p><b>Weight Class:</b> {fighter.weight_class}</p>
+      <hr/>
 
-<p><b>Gym:</b> {fighter.gym_name}</p>
+      <h2>Statistics</h2>
 
-<h2>Record</h2>
+      <p>KO Wins: {fighter.ko_wins}</p>
 
-<p>
-{fighter.pro_wins} -
-{fighter.pro_losses} -
-{fighter.pro_draws}
-( {fighter.pro_kos} KO )
-</p>
-
-<h2>Details</h2>
-
-<p><b>Height:</b> {fighter.height_cm} cm</p>
-
-<p><b>Stance:</b> {fighter.stance}</p>
-
-</div>
-
-)
-
+    </div>
+  );
 }
