@@ -11,7 +11,8 @@ export default function Fighters() {
 
   async function getFighters() {
 
-          .from("fighters")
+    const { data, error } = await supabase
+      .from("fighters")
       .select("*")
 
     if (error) {
