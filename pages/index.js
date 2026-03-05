@@ -23,8 +23,7 @@ src="/belt.png"
 width="120"
 />
 
-<h1>WBC Muay Thai Egypt</h1>
-
+https://vnagfyicoofgqwktrsvu.supabase.co/storage/v1/object/public/Public/WBC%20Muay%20Thai%20Egypt.jpg
 </div>
 
 <p>Official Fighters & Events Management Platform</p>        <p style={{marginTop:"10px"}}>
