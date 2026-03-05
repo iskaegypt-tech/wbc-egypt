@@ -15,13 +15,14 @@ export default function Fighters() {
   }, []);
 
   async function fetchFighters() {
+
     const { data, error } = await supabase
       .from("fighters")
       .select("*")
       .order("created_at", { ascending: false });
 
     if (error) {
-      console.error("Error loading fighters:", error);
+      console.log(error);
     } else {
       setFighters(data);
     }
@@ -29,9 +30,10 @@ export default function Fighters() {
 
   return (
     <div style={{ padding: "40px", fontFamily: "Arial" }}>
+
       <h1>Fighters</h1>
 
-      <table border="1" cellPadding="10" style={{ borderCollapse: "collapse", width: "100%" }}>
+      <table border="1" cellPadding="10" style={{ width: "100%" }}>
         <thead>
           <tr>
             <th>Name</th>
@@ -55,6 +57,7 @@ export default function Fighters() {
             </tr>
           ))}
         </tbody>
+
       </table>
 
     </div>
