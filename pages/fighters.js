@@ -4,6 +4,7 @@ import { supabase } from "../lib/supabaseClient";
 
 export default function Fighters() {
   const [fighters, setFighters] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetchFighters();
@@ -12,11 +13,18 @@ export default function Fighters() {
   async function fetchFighters() {
     const { data, error } = await supabase
       .from("fighters")
-      .select("*")
-      .order("created_at", { ascending: false });
+      .select("*");
 
-    if (!error) setFighters(data);
+    if (error) {
+      console.log(error);
+    } else {
+      setFighters(data);
+    }
+
+    setLoading(false);
   }
+
+  if (loading) return <p>Loading...</p>;
 
   return (
     <div style={{ padding: "40px" }}>
@@ -40,8 +48,8 @@ export default function Fighters() {
                 {fighter.photo_url && (
                   <img
                     src={fighter.photo_url}
-                    width="80"
-                    height="80"
+                    width="70"
+                    height="70"
                     style={{ objectFit: "cover" }}
                   />
                 )}
