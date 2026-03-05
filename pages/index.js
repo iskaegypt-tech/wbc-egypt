@@ -18,10 +18,10 @@ export default function Home() {
           gap:"20px"
         }}>
 
-          <img
-            src="https://vnaqfyicoofgqwktsrvu.supabase.co/storage/v1/object/public/Public/WBC%20Muay%20Thai%20Egypt.jpg"
-            style={{width:"160px"}}
-          />
+   <img
+src="https://vnaqfyicoofgqwktsrvu.supabase.co/storage/v1/object/public/Public/WBC%20Muay%20Thai%20Egypt.jpg"
+style={{width:"260px",marginBottom:"20px"}}
+/>
 
           <h1 style={{margin:0}}>WBC Muay Thai Egypt</h1>
 
