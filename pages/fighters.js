@@ -1,31 +1,35 @@
-import { useEffect, useState } from "react"
-import { supabase } from "../lib/supabaseClient"
+import { useEffect, useState } from "react";
+import Link from "next/link";
+import { supabase } from "../lib/supabaseClient";
 
 export default function Fighters() {
 
-  const [fighters, setFighters] = useState([])
+  const [fighters, setFighters] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    getFighters()
-  }, [])
+    fetchFighters();
+  }, []);
 
-  async function getFighters() {
+  async function fetchFighters() {
 
     const { data, error } = await supabase
       .from("fighters")
-      .select("*")
+      .select("*");
 
     if (error) {
-      console.log(error)
+      console.log(error);
     } else {
-      setFighters(data)
+      setFighters(data);
     }
+
+    setLoading(false);
   }
 
+  if (loading) return <p>Loading...</p>;
+
   return (
-
-    <div style={{padding:"40px"}}>
-
+    <div style={{ padding: "40px" }}>
       <h1>Fighters</h1>
 
       <table border="1" cellPadding="10">
@@ -45,11 +49,23 @@ export default function Fighters() {
           {fighters.map((fighter) => (
 
             <tr key={fighter.id}>
-              <td>{fighter.full_name}</td>
+
+              <td>
+                <Link href={`/fighters/${fighter.id}`}>
+                  {fighter.full_name}
+                </Link>
+              </td>
+
               <td>{fighter.nickname}</td>
+
               <td>{fighter.nationality}</td>
+
               <td>{fighter.weight_class}</td>
-              <td>{fighter.wins}-{fighter.losses}-{fighter.draws}</td>
+
+              <td>
+                {fighter.wins}-{fighter.losses}-{fighter.draws}
+              </td>
+
             </tr>
 
           ))}
@@ -59,5 +75,5 @@ export default function Fighters() {
       </table>
 
     </div>
-  )
+  );
 }
