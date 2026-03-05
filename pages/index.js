@@ -170,3 +170,6 @@ const eventCard={
   width:"250px",
   boxShadow:"0px 4px 10px rgba(0,0,0,0.2)"
 }
+<Link href="/champions">
+  <div style={card}>🥇 Champions</div>
+</Link>
