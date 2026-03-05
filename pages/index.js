@@ -49,7 +49,7 @@ export default function Home() {
             <div style={card}>
               🏆
               <h3>Titles</h3>
-              <p>Championship belts</p>
+              <p>Champion belts</p>
             </div>
           </Link>
 
