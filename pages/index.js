@@ -10,8 +10,24 @@ export default function Home() {
         color:"#fff",
         padding:"40px"
       }}>
-        <h1 style={{margin:0}}>WBC Muay Thai Egypt</h1>
-        <p style={{marginTop:"10px"}}>
+<div style={{
+display:"flex",
+alignItems:"center",
+justifyContent:"center",
+gap:"20px",
+marginTop:"40px"
+}}>
+
+<img
+src="/belt.png"
+width="120"
+/>
+
+<h1>WBC Muay Thai Egypt</h1>
+
+</div>
+
+<p>Official Fighters & Events Management Platform</p>        <p style={{marginTop:"10px"}}>
           Official Fighters & Events Management Platform
         </p>
       </div>
