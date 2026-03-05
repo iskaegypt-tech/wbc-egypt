@@ -1,57 +1,72 @@
-import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { createClient } from "@supabase/supabase-js";
+import { supabase } from "../lib/supabaseClient";
+import Link from "next/link";
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-);
+export default function Fighters() {
 
-export default function FighterProfile() {
-
-  const router = useRouter();
-  const { id } = router.query;
-
-  const [fighter, setFighter] = useState(null);
+  const [fighters, setFighters] = useState([]);
 
   useEffect(() => {
-    if (id) getFighter();
-  }, [id]);
+    fetchFighters();
+  }, []);
 
-  async function getFighter() {
+  async function fetchFighters() {
 
-    const { data, error } = await supabase
+    const { data } = await supabase
       .from("fighters")
       .select("*")
-      .eq("id", id)
-      .single();
+      .order("name");
 
-    if (!error) {
-      setFighter(data);
-    }
+    setFighters(data || []);
   }
 
-  if (!fighter) return <p style={{padding:"40px"}}>Loading...</p>;
-
   return (
-    <div style={{padding:"40px", fontFamily:"Arial"}}>
 
-      <h1>{fighter.full_name}</h1>
+    <div style={{padding:"40px"}}>
 
-      <h3>Nickname: {fighter.nickname}</h3>
+      <h1>Fighters</h1>
 
-      <p><b>Nationality:</b> {fighter.nationality}</p>
+      <table border="1" cellPadding="10">
 
-      <p><b>Weight Class:</b> {fighter.weight_class}</p>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Nickname</th>
+            <th>Nationality</th>
+            <th>Weight Class</th>
+            <th>Record</th>
+          </tr>
+        </thead>
 
-      <p><b>Record:</b> {fighter.wins}-{fighter.losses}-{fighter.draws}</p>
+        <tbody>
 
-      <hr/>
+          {fighters.map((fighter) => (
 
-      <h2>Statistics</h2>
+            <tr key={fighter.id}>
 
-      <p>KO Wins: {fighter.ko_wins}</p>
+              <td>
+                <Link href={`/fighter/${fighter.id}`}>
+                  {fighter.name}
+                </Link>
+              </td>
+
+              <td>{fighter.nickname}</td>
+              <td>{fighter.nationality}</td>
+              <td>{fighter.weight_class}</td>
+
+              <td>
+                {fighter.wins}-{fighter.losses}-{fighter.draws}
+              </td>
+
+            </tr>
+
+          ))}
+
+        </tbody>
+
+      </table>
 
     </div>
+
   );
 }
