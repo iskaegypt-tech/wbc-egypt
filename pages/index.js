@@ -2,54 +2,32 @@ import Link from "next/link";
 
 export default function Home() {
   return (
-    <div style={{fontFamily:"Arial", textAlign:"center"}}>
+    <div style={{fontFamily:"Arial",textAlign:"center",background:"#111",color:"#fff",minHeight:"100vh"}}>
 
-      {/* Header */}
-      <div style={{
-        background:"#000",
-        color:"#fff",
-        padding:"40px"
-      }}>
+      <div style={{padding:"60px"}}>
 
-        <div style={{
-          display:"flex",
-          alignItems:"center",
-          justifyContent:"center",
-          gap:"20px"
-        }}>
+        <img
+        src="https://vnaqfyicoofgqwktsrvu.supabase.co/storage/v1/object/public/Public/WBC%20Muay%20Thai%20Egypt.jpg"
+        style={{width:"260px"}}
+        />
 
-   <img
-src="https://vnaqfyicoofgqwktsrvu.supabase.co/storage/v1/object/public/Public/WBC%20Muay%20Thai%20Egypt.jpg"
-style={{width:"260px",marginBottom:"20px"}}
-/>
+        <h1 style={{fontSize:"40px",marginTop:"20px"}}>
+        WBC Muay Thai Egypt
+        </h1>
 
-          <h1 style={{margin:0}}>WBC Muay Thai Egypt</h1>
-
-        </div>
-
-        <p style={{marginTop:"10px"}}>
-          Official Fighters & Events Management Platform
+        <p style={{color:"#ccc"}}>
+        Official Fighters & Events Management Platform
         </p>
 
       </div>
 
-      {/* Navigation */}
-      <div style={{marginTop:"60px"}}>
+      <div style={{display:"flex",justifyContent:"center",gap:"40px"}}>
 
-        <h2>Explore the Platform</h2>
+        <Link href="/fighters">Fighters</Link>
 
-        <div style={{
-          display:"flex",
-          justifyContent:"center",
-          gap:"40px",
-          marginTop:"30px"
-        }}>
+        <Link href="/events">Events</Link>
 
-          <Link href="/fighters">Fighters</Link>
-          <Link href="/events">Events</Link>
-          <Link href="/titles">Titles</Link>
-
-        </div>
+        <Link href="/titles">Titles</Link>
 
       </div>
 
