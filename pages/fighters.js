@@ -5,26 +5,32 @@ import { supabase } from "../lib/supabaseClient";
 export default function Fighters() {
   const [fighters, setFighters] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    fetchFighters();
-  }, []);
+    async function load() {
+      try {
+        const { data, error } = await supabase
+          .from("fighters")
+          .select("*");
 
-  async function fetchFighters() {
-    const { data, error } = await supabase
-      .from("fighters")
-      .select("*");
-
-    if (error) {
-      console.log(error);
-    } else {
-      setFighters(data);
+        if (error) {
+          setError(error.message);
+        } else {
+          setFighters(data || []);
+        }
+      } catch (e) {
+        setError(e.message);
+      } finally {
+        setLoading(false);
+      }
     }
 
-    setLoading(false);
-  }
+    load();
+  }, []);
 
   if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error}</p>;
 
   return (
     <div style={{ padding: "40px" }}>
@@ -45,13 +51,15 @@ export default function Fighters() {
           {fighters.map((fighter) => (
             <tr key={fighter.id}>
               <td>
-                {fighter.photo_url && (
+                {fighter.photo_url ? (
                   <img
                     src={fighter.photo_url}
                     width="70"
                     height="70"
                     style={{ objectFit: "cover" }}
                   />
+                ) : (
+                  "-"
                 )}
               </td>
 
