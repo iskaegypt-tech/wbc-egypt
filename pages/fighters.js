@@ -45,7 +45,7 @@ export default function Fighters() {
           {fighters.map((fighter) => (
 
             <tr key={fighter.id}>
-              <td>{fighter.name}</td>
+              <td>{fighter.full_name}</td>
               <td>{fighter.nickname}</td>
               <td>{fighter.nationality}</td>
               <td>{fighter.weight_class}</td>
