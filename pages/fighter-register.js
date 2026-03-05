@@ -1,12 +1,34 @@
-import { useState } from "react";
+import { createClient } from "@supabase/supabase-js"
+
+const supabase = createClient(
+process.env.NEXT_PUBLIC_SUPABASE_URL,
+process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+)
 
 export default function FighterRegister() {
   const [name, setName] = useState("");
   const [weight, setWeight] = useState("");
   const [gym, setGym] = useState("");
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+const handleSubmit = async (e) => {
+e.preventDefault()
+
+const { data, error } = await supabase
+.from("fighters")
+.insert([
+{
+name: name,
+weight_class: weight,
+gym: gym
+}
+])
+
+if(error){
+alert("Error saving fighter")
+}else{
+alert("Fighter registered successfully")
+}
+}    e.preventDefault();
     alert("Fighter submitted (database connection will be next step)");
   };
 
