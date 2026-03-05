@@ -1,23 +1,25 @@
-import { useEffect, useState } from "react";
-import { supabase } from "../lib/supabaseClient";
-import Link from "next/link";
+import { useEffect, useState } from "react"
+import { supabase } from "../lib/supabaseClient"
 
 export default function Fighters() {
 
-  const [fighters, setFighters] = useState([]);
+  const [fighters, setFighters] = useState([])
 
   useEffect(() => {
-    fetchFighters();
-  }, []);
+    getFighters()
+  }, [])
 
-  async function fetchFighters() {
+  async function getFighters() {
 
-    const { data } = await supabase
+    const { data, error } = await supabase
       .from("fighters")
       .select("*")
-      .order("name");
 
-    setFighters(data || []);
+    if (error) {
+      console.log(error)
+    } else {
+      setFighters(data)
+    }
   }
 
   return (
@@ -43,21 +45,11 @@ export default function Fighters() {
           {fighters.map((fighter) => (
 
             <tr key={fighter.id}>
-
-              <td>
-                <Link href={`/fighter/${fighter.id}`}>
-                  {fighter.name}
-                </Link>
-              </td>
-
+              <td>{fighter.name}</td>
               <td>{fighter.nickname}</td>
               <td>{fighter.nationality}</td>
               <td>{fighter.weight_class}</td>
-
-              <td>
-                {fighter.wins}-{fighter.losses}-{fighter.draws}
-              </td>
-
+              <td>{fighter.wins}-{fighter.losses}-{fighter.draws}</td>
             </tr>
 
           ))}
@@ -67,6 +59,5 @@ export default function Fighters() {
       </table>
 
     </div>
-
-  );
+  )
 }
