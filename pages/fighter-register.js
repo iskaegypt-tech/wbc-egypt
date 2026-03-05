@@ -10,8 +10,32 @@ export default function FighterRegister() {
   const [weight, setWeight] = useState("");
   const [gym, setGym] = useState("");
 
+import { createClient } from "@supabase/supabase-js";
+
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+);
+
 const handleSubmit = async (e) => {
-e.preventDefault()
+  e.preventDefault();
+
+  const { data, error } = await supabase
+    .from("fighters")
+    .insert([
+      {
+        full_name: name,
+        nickname: name,
+        nationality: "Egypt"
+      }
+    ]);
+
+  if (error) {
+    alert("Error saving fighter");
+  } else {
+    alert("Fighter registered successfully");
+  }
+};e.preventDefault()
 
 const { data, error } = await supabase
 .from("fighters")
