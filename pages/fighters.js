@@ -11,29 +11,29 @@ export default function Fighters() {
   const [fighters, setFighters] = useState([]);
 
   useEffect(() => {
-    fetchFighters();
+    getFighters();
   }, []);
 
-  async function fetchFighters() {
+  async function getFighters() {
 
     const { data, error } = await supabase
       .from("fighters")
-      .select("*")
-      .order("created_at", { ascending: false });
+      .select("*");
 
     if (error) {
-      console.log(error);
+      console.log("ERROR:", error);
     } else {
+      console.log("DATA:", data);
       setFighters(data);
     }
   }
 
   return (
-    <div style={{ padding: "40px", fontFamily: "Arial" }}>
+    <div style={{padding:"40px", fontFamily:"Arial"}}>
 
       <h1>Fighters</h1>
 
-      <table border="1" cellPadding="10" style={{ width: "100%" }}>
+      <table border="1" cellPadding="10" style={{width:"100%"}}>
         <thead>
           <tr>
             <th>Name</th>
